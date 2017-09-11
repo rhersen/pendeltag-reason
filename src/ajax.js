@@ -5,6 +5,7 @@ function onerror(e) {
 function getStations(callback) {
   var request = new XMLHttpRequest();
   request.open("GET", "/json/stations", true);
+
   request.onload = function() {
     const results = JSON.parse(this.responseText).RESPONSE.RESULT[0]
       .TrainStation;
@@ -18,17 +19,20 @@ function getStations(callback) {
       })
     );
   };
+
   request.onerror = onerror;
   request.send();
 }
 
 function getAnnouncements(callback, signature) {
   var request = new XMLHttpRequest();
+
   request.open(
     "GET",
     "/json/departures?since=0:15&until=0:59&locations=" + signature,
     true
   );
+
   request.onload = function() {
     if (this.status !== 200) {
       callback([]);
@@ -48,18 +52,20 @@ function getAnnouncements(callback, signature) {
         function option(field) {
           return r[field] ? [r[field]] : 0;
         }
+
         return [
           r.AdvertisedTrainIdent,
           r.ActivityType,
           r.ToLocation.length ? r.ToLocation[0].LocationName : "?",
           r.LocationSignature,
           r.AdvertisedTimeAtLocation,
-          r.EstimatedTimeAtLocation ? [r.EstimatedTimeAtLocation] : 0,
-          r.TimeAtLocation ? [r.TimeAtLocation] : 0
+          option('EstimatedTimeAtLocation'),
+          option('TimeAtLocation')
         ];
       })
     );
   };
+
   request.onerror = onerror;
   request.send();
 }
