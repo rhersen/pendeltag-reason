@@ -1,47 +1,59 @@
 [%bs.raw {|require('./app.css')|}];
 
-type state = {stations: array Backend.station};
+type action =
+  | Stations (array Backend.station)
+  | Announcements (array Backend.announcement);
 
-let handleStations stations _ => ReasonReact.Update {stations: stations};
-
-let handleAnnouncements announcements _ => {
-  Array.iter
-    (
-      fun (a: Backend.announcement) =>
-        Js.log (
-          a.time ^
-          " " ^
-          a.destination ^
-          (
-            switch a.estimated {
-            | None => " "
-            | Some s => s
-            }
-          ) ^ (
-            switch a.actual {
-            | None => " "
-            | Some s => s
-            }
-          )
-        )
-    )
-    announcements;
-  ReasonReact.NoUpdate
+type state = {
+  stations: array Backend.station,
+  announcements: array Backend.announcement
 };
 
-let component = ReasonReact.statefulComponent "App";
+let component = ReasonReact.reducerComponent "App";
 
-let make _children => {
+let formatAnnouncement (a: Backend.announcement) =>
+  a.time ^
+  a.destination ^
+  (
+    switch a.estimated {
+    | None => ""
+    | Some s => " estimated: " ^ s
+    }
+  ) ^ (
+    switch a.actual {
+    | None => ""
+    | Some s => " actual: " ^ s
+    }
+  );
+
+let make _ => {
   ...component,
-  initialState: fun () => {stations: [||]},
+  initialState: fun () => {stations: [||], announcements: [||]},
+  reducer: fun action state =>
+    switch action {
+    | Stations stations => ReasonReact.Update {...state, stations}
+    | Announcements announcements =>
+      Array.iter (fun a => a |> formatAnnouncement |> Js.log) announcements;
+      ReasonReact.Update {...state, announcements}
+    },
   didMount: fun self => {
-    Backend.getStations (self.update handleStations);
+    Backend.getStations (self.reduce (fun stations => Stations stations));
     ReasonReact.NoUpdate
   },
   render: fun self =>
     <div className="App">
       <div className="App-header">
         <h2> (ReasonReact.stringToElement "Pendelt\229g") </h2>
+      </div>
+      <div onClick=(self.reduce (fun _ => Announcements [||]))>
+        (ReasonReact.stringToElement "X")
+      </div>
+      <div>
+        (
+          ReasonReact.stringToElement (
+            string_of_int (Array.length self.state.announcements) ^ " announcements"
+          )
+        )
       </div>
       <ul>
         (
@@ -52,11 +64,14 @@ let make _children => {
                   <li
                     key=station.signature
                     onClick=(
-                      fun _event => {
-                        Js.log ("clicked " ^ station.signature);
+                      fun _ =>
                         Backend.getAnnouncements
-                          (self.update handleAnnouncements) station.signature
-                      }
+                          (
+                            self.reduce (
+                              fun announcements => Announcements announcements
+                            )
+                          )
+                          station.signature
                     )>
                     (ReasonReact.stringToElement station.name)
                   </li>
