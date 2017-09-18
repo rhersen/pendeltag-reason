@@ -45,9 +45,13 @@ let make _ => {
       <div className="App-header">
         <h2> (ReasonReact.stringToElement "Pendelt\229g") </h2>
       </div>
-      <div onClick=(self.reduce (fun _ => Announcements [||]))>
-        (ReasonReact.stringToElement "X")
-      </div>
+      (
+        Array.length self.state.announcements != 0 ?
+          <div onClick=(self.reduce (fun _ => Announcements [||]))>
+            (ReasonReact.stringToElement "X")
+          </div> :
+          <div> (ReasonReact.stringToElement "aoeu") </div>
+      )
       <div>
         (
           ReasonReact.stringToElement (
@@ -55,6 +59,18 @@ let make _ => {
           )
         )
       </div>
+      <ul>
+        (
+          ReasonReact.arrayToElement (
+            Array.map
+              (
+                fun (announcement: Backend.announcement) =>
+                  <li> (ReasonReact.stringToElement announcement.destination) </li>
+              )
+              self.state.announcements
+          )
+        )
+      </ul>
       <ul>
         (
           ReasonReact.arrayToElement (
