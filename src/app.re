@@ -46,55 +46,56 @@ let make _ => {
         <h2> (ReasonReact.stringToElement "Pendelt\229g") </h2>
       </div>
       (
-        Array.length self.state.announcements != 0 ?
+        if (Array.length self.state.announcements != 0) {
           <div onClick=(self.reduce (fun _ => Announcements [||]))>
             (ReasonReact.stringToElement "X")
-          </div> :
-          <div> (ReasonReact.stringToElement "aoeu") </div>
+          </div>
+        } else {
+          <div>
+            (
+              ReasonReact.arrayToElement (
+                Array.map
+                  (
+                    fun (station: Backend.station) =>
+                      <span
+                        key=station.signature
+                        onClick=(
+                          fun _ =>
+                            Backend.getAnnouncements
+                              (
+                                self.reduce (
+                                  fun announcements =>
+                                    Announcements announcements
+                                )
+                              )
+                              station.signature
+                        )>
+                        (ReasonReact.stringToElement (station.name ^ " "))
+                      </span>
+                  )
+                  self.state.stations
+              )
+            )
+          </div>
+        }
       )
-      <div>
-        (
-          ReasonReact.stringToElement (
-            string_of_int (Array.length self.state.announcements) ^ " announcements"
-          )
-        )
-      </div>
-      <ul>
+      <ol>
         (
           ReasonReact.arrayToElement (
             Array.map
               (
                 fun (announcement: Backend.announcement) =>
-                  <li> (ReasonReact.stringToElement announcement.destination) </li>
+                  <li key=announcement.id>
+                    (
+                      ReasonReact.stringToElement (
+                        announcement.time ^ announcement.destination
+                      )
+                    )
+                  </li>
               )
               self.state.announcements
           )
         )
-      </ul>
-      <ul>
-        (
-          ReasonReact.arrayToElement (
-            Array.map
-              (
-                fun (station: Backend.station) =>
-                  <li
-                    key=station.signature
-                    onClick=(
-                      fun _ =>
-                        Backend.getAnnouncements
-                          (
-                            self.reduce (
-                              fun announcements => Announcements announcements
-                            )
-                          )
-                          station.signature
-                    )>
-                    (ReasonReact.stringToElement station.name)
-                  </li>
-              )
-              self.state.stations
-          )
-        )
-      </ul>
+      </ol>
     </div>
 };
