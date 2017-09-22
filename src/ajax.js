@@ -4,7 +4,7 @@ function onerror(e) {
 
 function getStations(callback) {
   var request = new XMLHttpRequest();
-  request.open("GET", "/json/stations", true);
+  request.open('GET', '/json/stations', true);
 
   request.onload = function() {
     const results = JSON.parse(this.responseText).RESPONSE.RESULT[0]
@@ -28,8 +28,8 @@ function getAnnouncements(callback, signature) {
   var request = new XMLHttpRequest();
 
   request.open(
-    "GET",
-    "/json/departures?since=0:15&until=0:59&locations=" + signature,
+    'GET',
+    '/json/departures?since=0:15&until=0:59&locations=' + signature,
     true
   );
 
@@ -56,7 +56,9 @@ function getAnnouncements(callback, signature) {
         return [
           r.AdvertisedTrainIdent,
           r.ActivityType,
-          r.ToLocation.length ? r.ToLocation[0].LocationName : "?",
+          r.ToLocation && r.ToLocation.length
+            ? r.ToLocation[0].LocationName
+            : '?',
           r.LocationSignature,
           r.AdvertisedTimeAtLocation,
           option('EstimatedTimeAtLocation'),
