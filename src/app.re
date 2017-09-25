@@ -9,22 +9,11 @@ type state = {
   announcements: array Backend.announcement
 };
 
+let el = ReasonReact.stringToElement;
+
 let component = ReasonReact.reducerComponent "App";
 
-let formatAnnouncement (a: Backend.announcement) =>
-  a.time ^
-  a.destination ^
-  (
-    switch a.estimated {
-    | None => ""
-    | Some s => " estimated: " ^ s
-    }
-  ) ^ (
-    switch a.actual {
-    | None => ""
-    | Some s => " actual: " ^ s
-    }
-  );
+let formatTime (s: string) => String.sub s 11 5;
 
 let make _ => {
   ...component,
@@ -33,7 +22,6 @@ let make _ => {
     switch action {
     | Stations stations => ReasonReact.Update {...state, stations}
     | Announcements announcements =>
-      Array.iter (fun a => a |> formatAnnouncement |> Js.log) announcements;
       ReasonReact.Update {...state, announcements}
     },
   didMount: fun self => {
@@ -42,13 +30,11 @@ let make _ => {
   },
   render: fun self =>
     <div className="App">
-      <div className="App-header">
-        <h2> (ReasonReact.stringToElement "Pendelt\229g") </h2>
-      </div>
+      <div className="App-header"> <h2> (el "Pendelt\229g") </h2> </div>
       (
         if (Array.length self.state.announcements != 0) {
           <div onClick=(self.reduce (fun _ => Announcements [||]))>
-            (ReasonReact.stringToElement "X")
+            (el "X")
           </div>
         } else {
           <div>
@@ -70,7 +56,7 @@ let make _ => {
                               )
                               station.signature
                         )>
-                        (ReasonReact.stringToElement (station.name ^ " "))
+                        (el (station.name ^ " "))
                       </span>
                   )
                   self.state.stations
@@ -79,23 +65,40 @@ let make _ => {
           </div>
         }
       )
-      <ol>
+      <table>
         (
           ReasonReact.arrayToElement (
             Array.map
               (
                 fun (announcement: Backend.announcement) =>
-                  <li key=announcement.id>
-                    (
-                      ReasonReact.stringToElement (
-                        announcement.time ^ announcement.destination
+                  <tr key=announcement.id>
+                    <td> (el (formatTime announcement.time)) </td>
+                    <td> (el announcement.destination) </td>
+                    <td>
+                      (
+                        el (
+                          switch announcement.estimated {
+                          | None => "-"
+                          | Some s => formatTime s
+                          }
+                        )
                       )
-                    )
-                  </li>
+                    </td>
+                    <td>
+                      (
+                        el (
+                          switch announcement.actual {
+                          | None => "-"
+                          | Some s => formatTime s
+                          }
+                        )
+                      )
+                    </td>
+                  </tr>
               )
               self.state.announcements
           )
         )
-      </ol>
+      </table>
     </div>
 };
