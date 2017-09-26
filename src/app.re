@@ -6,21 +6,34 @@ type action =
 
 type state = {
   stations: array Backend.station,
+  name: Hashtbl.t string string,
   announcements: array Backend.announcement
 };
 
 let el = ReasonReact.stringToElement;
 
-let component = ReasonReact.reducerComponent "App";
-
 let formatTime (s: string) => String.sub s 11 5;
+
+let component = ReasonReact.reducerComponent "App";
 
 let make _ => {
   ...component,
-  initialState: fun () => {stations: [||], announcements: [||]},
+  initialState: fun () => {
+    stations: [||],
+    name: Hashtbl.create 231,
+    announcements: [||]
+  },
   reducer: fun action state =>
     switch action {
-    | Stations stations => ReasonReact.Update {...state, stations}
+    | Stations stations =>
+      let name = Hashtbl.create 231;
+      Array.iter
+        (
+          fun (station: Backend.station) =>
+            Hashtbl.add name station.signature station.name
+        )
+        stations;
+      ReasonReact.Update {...state, name, stations}
     | Announcements announcements =>
       ReasonReact.Update {...state, announcements}
     },
@@ -66,39 +79,52 @@ let make _ => {
         }
       )
       <table>
-        (
-          ReasonReact.arrayToElement (
-            Array.map
-              (
-                fun (announcement: Backend.announcement) =>
-                  <tr key=announcement.id>
-                    <td> (el (formatTime announcement.time)) </td>
-                    <td> (el announcement.destination) </td>
-                    <td>
-                      (
-                        el (
-                          switch announcement.estimated {
-                          | None => "-"
-                          | Some s => formatTime s
-                          }
+        <tbody>
+          (
+            ReasonReact.arrayToElement (
+              Array.map
+                (
+                  fun (announcement: Backend.announcement) =>
+                    <tr key=announcement.id>
+                      <td> (el (formatTime announcement.time)) </td>
+                      <td>
+                        (
+                          el (
+                            Hashtbl.find
+                              self.state.name announcement.destination
+                          )
                         )
-                      )
-                    </td>
-                    <td>
-                      (
-                        el (
-                          switch announcement.actual {
-                          | None => "-"
-                          | Some s => formatTime s
-                          }
-                        )
-                      )
-                    </td>
-                  </tr>
-              )
-              self.state.announcements
+                      </td>
+                      <td>
+                        <i>
+                          (
+                            el (
+                              switch announcement.estimated {
+                              | None => "-"
+                              | Some s => formatTime s
+                              }
+                            )
+                          )
+                        </i>
+                      </td>
+                      <td>
+                        <b>
+                          (
+                            el (
+                              switch announcement.actual {
+                              | None => "-"
+                              | Some s => formatTime s
+                              }
+                            )
+                          )
+                        </b>
+                      </td>
+                    </tr>
+                )
+                self.state.announcements
+            )
           )
-        )
+        </tbody>
       </table>
     </div>
 };
