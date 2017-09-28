@@ -17,3 +17,7 @@ external getStations : (array station => unit) => unit =
 
 external getAnnouncements : (array announcement => unit) => string => unit =
   "getAnnouncements" [@@bs.module "./ajax"];
+
+external now : unit => float = "now" [@@bs.module "./ajax"];
+
+external millis : string => float = "millis" [@@bs.module "./ajax"];

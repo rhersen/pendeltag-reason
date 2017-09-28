@@ -43,7 +43,6 @@ let make _ => {
   },
   render: fun self =>
     <div className="App">
-      <div className="App-header"> <h2> (el "Pendelt\229g") </h2> </div>
       (
         if (Array.length self.state.announcements != 0) {
           <div onClick=(self.reduce (fun _ => Announcements [||]))>
@@ -118,6 +117,18 @@ let make _ => {
                             )
                           )
                         </b>
+                      </td>
+                      <td>
+                        (
+                          el (
+                            string_of_float (
+                              (
+                                Backend.millis announcement.time -.
+                                Backend.now ()
+                              ) /. 1000.
+                            )
+                          )
+                        )
                       </td>
                     </tr>
                 )

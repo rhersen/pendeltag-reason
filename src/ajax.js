@@ -72,4 +72,12 @@ function getAnnouncements(callback, signature) {
   request.send();
 }
 
-module.exports = { getStations, getAnnouncements };
+function millis(s) {
+  return Date.parse(s);
+}
+
+function now() {
+  return Date.now();
+}
+
+module.exports = { getStations, getAnnouncements, millis, now };
