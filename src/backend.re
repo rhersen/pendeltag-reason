@@ -21,3 +21,5 @@ external getAnnouncements : (array announcement => unit) => string => unit =
 external now : unit => float = "now" [@@bs.module "./ajax"];
 
 external millis : string => float = "millis" [@@bs.module "./ajax"];
+
+external interval : (unit => unit) => unit = "interval" [@@bs.module "./ajax"];
