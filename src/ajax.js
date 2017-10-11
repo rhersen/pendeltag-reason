@@ -81,7 +81,11 @@ function now() {
 }
 
 function interval(callback) {
-  setInterval(callback, 256);
+  return setInterval(callback, 256);
 }
 
-module.exports = { getStations, getAnnouncements, millis, now, interval };
+function clear(intervalId) {
+  return clearInterval(intervalId);
+}
+
+module.exports = { getStations, getAnnouncements, millis, now, interval, clear };

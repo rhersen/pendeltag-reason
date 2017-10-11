@@ -2,7 +2,7 @@
 
 type action =
   | Stations (array Backend.station)
-  | Announcements (array Backend.announcement)
+  | Announcements (array Backend.announcement) int
   | Now float;
 
 let el = ReasonReact.stringToElement;
@@ -22,7 +22,8 @@ type state = {
   stations: array Backend.station,
   name: Hashtbl.t string string,
   announcements: array Backend.announcement,
-  now: float
+  now: float,
+  intervalId: int
 };
 
 let component = ReasonReact.reducerComponent "App";
@@ -33,7 +34,8 @@ let make _ => {
     stations: [||],
     name: Hashtbl.create 231,
     announcements: [||],
-    now: Backend.now ()
+    now: Backend.now (),
+    intervalId: 0
   },
   reducer: fun action state =>
     switch action {
@@ -43,19 +45,29 @@ let make _ => {
         (fun (station: Backend.station) => Hashtbl.add name station.signature station.name)
         stations;
       ReasonReact.Update {...state, name, stations}
-    | Announcements announcements => ReasonReact.Update {...state, announcements}
+    | Announcements announcements intervalId =>
+      ReasonReact.Update {...state, announcements, intervalId}
     | Now now => ReasonReact.Update {...state, now}
     },
   didMount: fun self => {
     Backend.getStations (self.reduce (fun stations => Stations stations));
-    Backend.interval (self.reduce (fun _ => Now (Backend.now ())));
     ReasonReact.NoUpdate
   },
   render: fun self =>
     <div className="App">
       (
         if (Array.length self.state.announcements != 0) {
-          <div onClick=(self.reduce (fun _ => Announcements [||]))> (el "X") </div>
+          <div
+            onClick=(
+              self.reduce (
+                fun _ => {
+                  Backend.clear self.state.intervalId;
+                  Announcements [||] 0
+                }
+              )
+            )>
+            (el "X")
+          </div>
         } else {
           <div>
             (
@@ -68,7 +80,17 @@ let make _ => {
                         onClick=(
                           fun _ =>
                             Backend.getAnnouncements
-                              (self.reduce (fun announcements => Announcements announcements))
+                              (
+                                self.reduce (
+                                  fun a => {
+                                    let intervalId =
+                                      Backend.interval (
+                                        self.reduce (fun _ => Now (Backend.now ()))
+                                      );
+                                    Announcements a intervalId
+                                  }
+                                )
+                              )
                               station.signature
                         )>
                         (el (station.name ^ " "))
