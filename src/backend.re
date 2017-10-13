@@ -17,9 +17,11 @@ external getStations : (array station => unit) => unit = "getStations" [@@bs.mod
 external getAnnouncements : (array announcement => unit) => string => unit =
   "getAnnouncements" [@@bs.module "./ajax"];
 
-external now : unit => float = "now" [@@bs.module "./ajax"];
+external hour : unit => int = "hour" [@@bs.module "./ajax"];
 
-external millis : string => float = "millis" [@@bs.module "./ajax"];
+external minute : unit => int = "minute" [@@bs.module "./ajax"];
+
+external second : unit => int = "second" [@@bs.module "./ajax"];
 
 external interval : (unit => unit) => int = "interval" [@@bs.module "./ajax"];
 

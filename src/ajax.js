@@ -72,12 +72,19 @@ function getAnnouncements(callback, signature) {
   request.send();
 }
 
-function millis(s) {
-  return Date.parse(s);
+function hour() {
+  const now = new Date();
+  return now.getHours();
 }
 
-function now() {
-  return Date.now();
+function minute() {
+  const now = new Date();
+  return now.getMinutes();
+}
+
+function second() {
+  const now = new Date();
+  return now.getSeconds();
 }
 
 function interval(callback) {
@@ -88,4 +95,12 @@ function clear(intervalId) {
   return clearInterval(intervalId);
 }
 
-module.exports = { getStations, getAnnouncements, millis, now, interval, clear };
+module.exports = {
+  getStations,
+  getAnnouncements,
+  hour,
+  minute,
+  second,
+  interval,
+  clear
+};

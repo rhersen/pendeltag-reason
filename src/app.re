@@ -3,26 +3,29 @@
 type action =
   | Stations (array Backend.station)
   | Announcements (array Backend.announcement) int
-  | Now float;
+  | Second int;
 
 let el = ReasonReact.stringToElement;
 
 let formatTime (s: string) => String.sub s 11 5;
 
-let formatCountdown time now => {
-  let r = (Backend.millis time -. now) /. 1000.;
-  if ((-90.) < r && r < 300.) {
-    Printf.sprintf "%4.1f" r
-  } else {
-    Printf.sprintf "%d min" (truncate (r /. 60.))
-  }
-};
+let formatCountdown time now =>
+  switch (Js.Re.exec time [%re "/T(\\d\\d):(\\d\\d):(\\d\\d)/"]) {
+  | None => "?"
+  | Some result =>
+    let match = Js.Re.matches result;
+    string_of_int (
+      int_of_string match.(3) - now +
+      (int_of_string match.(2) - Backend.minute ()) * 60 +
+      (int_of_string match.(1) - Backend.hour ()) * 60 * 60
+    )
+  };
 
 type state = {
   stations: array Backend.station,
   name: Hashtbl.t string string,
   announcements: array Backend.announcement,
-  now: float,
+  now: int,
   intervalId: int
 };
 
@@ -34,7 +37,7 @@ let make _ => {
     stations: [||],
     name: Hashtbl.create 231,
     announcements: [||],
-    now: Backend.now (),
+    now: Backend.second (),
     intervalId: 0
   },
   reducer: fun action state =>
@@ -47,7 +50,7 @@ let make _ => {
       ReasonReact.Update {...state, name, stations}
     | Announcements announcements intervalId =>
       ReasonReact.Update {...state, announcements, intervalId}
-    | Now now => ReasonReact.Update {...state, now}
+    | Second now => ReasonReact.Update {...state, now}
     },
   didMount: fun self => {
     Backend.getStations (self.reduce (fun stations => Stations stations));
@@ -82,13 +85,14 @@ let make _ => {
                             Backend.getAnnouncements
                               (
                                 self.reduce (
-                                  fun a => {
-                                    let intervalId =
-                                      Backend.interval (
-                                        self.reduce (fun _ => Now (Backend.now ()))
-                                      );
-                                    Announcements a intervalId
-                                  }
+                                  fun announcements =>
+                                    Announcements
+                                      announcements
+                                      (
+                                        Backend.interval (
+                                          self.reduce (fun _ => Second (Backend.second ()))
+                                        )
+                                      )
                                 )
                               )
                               station.signature
