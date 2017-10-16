@@ -14,11 +14,13 @@ let formatCountdown time now =>
   | None => "?"
   | Some result =>
     let match = Js.Re.matches result;
-    string_of_int (
-      int_of_string match.(3) - now +
-      (int_of_string match.(2) - Backend.minute ()) * 60 +
-      (int_of_string match.(1) - Backend.hour ()) * 60 * 60
-    )
+    string_of_int (      int_of_string match.(3) - now + (int_of_string match.(2) - Backend.minute ()) * 60 +      (int_of_string match.(1) - Backend.hour ()) * 60 * 60    )
+  };
+
+let estimated (announcement: Backend.announcement) =>
+  switch announcement.estimated {
+  | None => announcement.time
+  | Some s => s
   };
 
 type state = {
@@ -141,7 +143,7 @@ let make _ => {
                         </b>
                       </td>
                       <td className="countdown">
-                        (el (formatCountdown announcement.time self.state.now))
+                        (el (formatCountdown (estimated announcement) self.state.now))
                       </td>
                     </tr>
                 )

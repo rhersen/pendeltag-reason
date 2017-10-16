@@ -88,7 +88,7 @@ function second() {
 }
 
 function interval(callback) {
-  return setInterval(callback, 256);
+  return setInterval(callback, 990);
 }
 
 function clear(intervalId) {
