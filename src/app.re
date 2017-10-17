@@ -9,19 +9,22 @@ let el = ReasonReact.stringToElement;
 
 let formatTime (s: string) => String.sub s 11 5;
 
-let formatCountdown time now =>
+let formatCountdown (announcement: Backend.announcement) now => {
+  let time =
+    switch announcement.estimated {
+    | None => announcement.time
+    | Some s => s
+    };
   switch (Js.Re.exec time [%re "/T(\\d\\d):(\\d\\d):(\\d\\d)/"]) {
-  | None => "?"
+  | None => time
   | Some result =>
     let match = Js.Re.matches result;
-    string_of_int (      int_of_string match.(3) - now + (int_of_string match.(2) - Backend.minute ()) * 60 +      (int_of_string match.(1) - Backend.hour ()) * 60 * 60    )
-  };
-
-let estimated (announcement: Backend.announcement) =>
-  switch announcement.estimated {
-  | None => announcement.time
-  | Some s => s
-  };
+    string_of_int (
+      int_of_string match.(3) - now + (int_of_string match.(2) - Backend.minute ()) * 60 +
+      (int_of_string match.(1) - Backend.hour ()) * 60 * 60
+    )
+  }
+};
 
 type state = {
   stations: array Backend.station,
@@ -143,7 +146,7 @@ let make _ => {
                         </b>
                       </td>
                       <td className="countdown">
-                        (el (formatCountdown (estimated announcement) self.state.now))
+                        (el (formatCountdown announcement self.state.now))
                       </td>
                     </tr>
                 )
