@@ -72,19 +72,9 @@ function getAnnouncements(callback, signature) {
   request.send();
 }
 
-function hour() {
-  const now = new Date();
-  return now.getHours();
-}
-
-function minute() {
-  const now = new Date();
-  return now.getMinutes();
-}
-
-function second() {
-  const now = new Date();
-  return now.getSeconds();
+function now() {
+  const d = new Date();
+  return [d.getHours(), d.getMinutes(), d.getSeconds()];
 }
 
 function interval(callback) {
@@ -98,9 +88,7 @@ function clear(intervalId) {
 module.exports = {
   getStations,
   getAnnouncements,
-  hour,
-  minute,
-  second,
+  now,
   interval,
   clear
 };

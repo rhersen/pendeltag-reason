@@ -3,7 +3,7 @@
 type action =
   | Stations (array Backend.station)
   | Announcements (array Backend.announcement) int
-  | Second int;
+  | Now (int, int, int);
 
 let el = ReasonReact.stringToElement;
 
@@ -19,9 +19,10 @@ let formatCountdown (announcement: Backend.announcement) now => {
   | None => time
   | Some result =>
     let match = Js.Re.matches result;
+    let (hour, minute, second) = now;
     string_of_int (
-      int_of_string match.(3) - now + (int_of_string match.(2) - Backend.minute ()) * 60 +
-      (int_of_string match.(1) - Backend.hour ()) * 60 * 60
+      int_of_string match.(3) - second + (int_of_string match.(2) - minute) * 60 +
+      (int_of_string match.(1) - hour) * 60 * 60
     )
   }
 };
@@ -30,7 +31,7 @@ type state = {
   stations: array Backend.station,
   name: Hashtbl.t string string,
   announcements: array Backend.announcement,
-  now: int,
+  now: (int, int, int),
   intervalId: int
 };
 
@@ -42,7 +43,7 @@ let make _ => {
     stations: [||],
     name: Hashtbl.create 231,
     announcements: [||],
-    now: Backend.second (),
+    now: Backend.now (),
     intervalId: 0
   },
   reducer: fun action state =>
@@ -55,7 +56,7 @@ let make _ => {
       ReasonReact.Update {...state, name, stations}
     | Announcements announcements intervalId =>
       ReasonReact.Update {...state, announcements, intervalId}
-    | Second now => ReasonReact.Update {...state, now}
+    | Now now => ReasonReact.Update {...state, now}
     },
   didMount: fun self => {
     Backend.getStations (self.reduce (fun stations => Stations stations));
@@ -95,7 +96,7 @@ let make _ => {
                                       announcements
                                       (
                                         Backend.interval (
-                                          self.reduce (fun _ => Second (Backend.second ()))
+                                          self.reduce (fun _ => Now (Backend.now ()))
                                         )
                                       )
                                 )
