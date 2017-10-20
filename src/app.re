@@ -123,28 +123,16 @@ let make _ => {
                       <td> (el (formatTime announcement.time)) </td>
                       <td> (el (Hashtbl.find self.state.name announcement.destination)) </td>
                       <td>
-                        <i>
-                          (
-                            el (
+                        (
+                          switch announcement.actual {
+                          | None =>
                               switch announcement.estimated {
-                              | None => "-"
-                              | Some s => formatTime s
+                              | None => (el "")
+                              | Some s => <i> (el (formatTime s)) </i>
                               }
-                            )
-                          )
-                        </i>
-                      </td>
-                      <td>
-                        <b>
-                          (
-                            el (
-                              switch announcement.actual {
-                              | None => "-"
-                              | Some s => formatTime s
-                              }
-                            )
-                          )
-                        </b>
+                          | Some s => <b> (el (formatTime s)) </b>
+                          }
+                        )
                       </td>
                       <td className="countdown">
                         (el (formatCountdown announcement self.state.now))
