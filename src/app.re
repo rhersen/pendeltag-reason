@@ -35,6 +35,13 @@ type state = {
   intervalId: int
 };
 
+let getName name destination =>
+  if (Hashtbl.mem name destination) {
+    Hashtbl.find name destination
+  } else {
+    destination
+  };
+
 let component = ReasonReact.reducerComponent "App";
 
 let make _ => {
@@ -122,7 +129,7 @@ let make _ => {
                   fun (announcement: Backend.announcement) =>
                     <tr key=announcement.id>
                       <td> (el (formatTime announcement.time)) </td>
-                      <td> (el (Hashtbl.find self.state.name announcement.destination)) </td>
+                      <td> (el (getName self.state.name announcement.destination)) </td>
                       <td>
                         (
                           switch announcement.actual {
