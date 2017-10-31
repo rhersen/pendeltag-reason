@@ -86,6 +86,7 @@ let make _ => {
                     fun (station: Backend.station) =>
                       <span
                         key=station.signature
+                        className="station"
                         onClick=(
                           fun _ =>
                             Backend.getAnnouncements
@@ -126,10 +127,10 @@ let make _ => {
                         (
                           switch announcement.actual {
                           | None =>
-                              switch announcement.estimated {
-                              | None => (el "")
-                              | Some s => <i> (el (formatTime s)) </i>
-                              }
+                            switch announcement.estimated {
+                            | None => el ""
+                            | Some s => <i> (el (formatTime s)) </i>
+                            }
                           | Some s => <b> (el (formatTime s)) </b>
                           }
                         )

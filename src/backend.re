@@ -1,6 +1,4 @@
-type geometry = {east: float, north: float};
-
-type station = {signature: string, name: string, geometry};
+type station = {signature: string, name: string};
 
 type announcement = {
   id: string,

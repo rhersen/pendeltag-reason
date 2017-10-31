@@ -4,17 +4,15 @@ function onerror(e) {
 
 function getStations(callback) {
   var request = new XMLHttpRequest();
-  request.open("GET", "/json/stations", true);
+  request.open("GET", "/json/pendel", true);
 
   request.onload = function() {
-    const results = JSON.parse(this.responseText).RESPONSE.RESULT[0]
-      .TrainStation;
+    const results = JSON.parse(this.responseText);
     callback(
       results.map(function(r) {
         return [
           r.LocationSignature,
-          r.AdvertisedShortLocationName,
-          [r.Geometry.WGS84.east, r.Geometry.WGS84.north]
+          r.AdvertisedShortLocationName
         ];
       })
     );
