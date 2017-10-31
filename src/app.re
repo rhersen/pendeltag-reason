@@ -48,7 +48,7 @@ let make _ => {
   ...component,
   initialState: fun () => {
     stations: [||],
-    name: Hashtbl.create 231,
+    name: Hashtbl.create 53,
     announcements: [||],
     now: Backend.now (),
     intervalId: 0
@@ -56,7 +56,7 @@ let make _ => {
   reducer: fun action state =>
     switch action {
     | Stations stations =>
-      let name = Hashtbl.create 231;
+      let name = Hashtbl.create 53;
       Array.iter
         (fun (station: Backend.station) => Hashtbl.add name station.signature station.name)
         stations;
