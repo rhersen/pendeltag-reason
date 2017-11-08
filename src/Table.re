@@ -14,7 +14,7 @@ let make = (~announcements, _children) => {
                 <tr key=announcement.id>
                   <td> (ReasonReact.stringToElement(announcement.id)) </td>
                   <td> (ReasonReact.stringToElement(formatTime(announcement.time))) </td>
-                  <td> (ReasonReact.stringToElement(announcement.destination)) </td>
+                  <td> (ReasonReact.stringToElement(Backend.name(announcement.destination))) </td>
                   <td>
                     (
                       switch announcement.actual {

@@ -23,3 +23,5 @@ type announcement = {
 [@bs.module "./ajax"] external interval : (unit => unit) => int = "interval";
 
 [@bs.module "./ajax"] external clear : int => unit = "clear";
+
+[@bs.module "./ajax"] external name : string => string = "name";

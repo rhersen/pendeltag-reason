@@ -1,3 +1,9 @@
+const names = {};
+
+function name(locationSignature) {
+  return names[locationSignature] || locationSignature;
+}
+
 function onerror(e) {
   console.error(e);
 }
@@ -8,6 +14,9 @@ function getStations(callback) {
 
   request.onload = function() {
     const results = JSON.parse(this.responseText);
+    results.forEach((element) =>
+      names[element.LocationSignature] = element.AdvertisedShortLocationName
+    );
     callback(
       results.map(function(r) {
         return [
@@ -88,5 +97,6 @@ module.exports = {
   getAnnouncements,
   now,
   interval,
-  clear
+  clear,
+  name
 };
