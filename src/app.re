@@ -21,25 +21,25 @@ let make = (_children) => {
     | Stations(stations) => ReasonReact.Update({...state, stations})
     | Announcements(announcements) => ReasonReact.Update({...state, announcements})
     },
-  didMount: (self) => {
-    Backend.getStations(self.reduce((stations) => Stations(stations)));
+  didMount: ({reduce}) => {
+    Backend.getStations(reduce((stations) => Stations(stations)));
     ReasonReact.NoUpdate
   },
-  render: (self) =>
+  render: ({reduce, state: {announcements, stations}}) =>
     <div className="App">
       (
-        if (Array.length(self.state.announcements) > 0) {
+        if (Array.length(announcements) > 0) {
           <Header
-            onClick=(self.reduce((_event) => Announcements([||])))
-            location=(Backend.name(self.state.announcements[0].location))
+            onClick=(reduce((_event) => Announcements([||])))
+            location=(Backend.name(announcements[0].location))
           />
         } else {
           <StationMenu
-            stations=self.state.stations
-            setAnnouncements=(self.reduce((announcements) => Announcements(announcements)))
+            stations
+            setAnnouncements=(reduce((announcements) => Announcements(announcements)))
           />
         }
       )
-      <Table announcements=self.state.announcements />
+      <Table announcements />
     </div>
 };

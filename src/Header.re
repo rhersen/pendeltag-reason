@@ -5,7 +5,6 @@ let make = (~onClick, ~location, _children) => {
   render: (_self) =>
     <div>
       <span className="close" onClick> (ReasonReact.stringToElement({js|×|js})) </span>
-      <span> (ReasonReact.stringToElement(" ")) </span>
       <h1> (ReasonReact.stringToElement(location)) </h1>
     </div>
 };
