@@ -36,7 +36,9 @@ let make = (_children) => {
         } else {
           <StationMenu
             stations
-            setAnnouncements=(reduce((announcements) => Announcements(announcements)))
+            onClick=(
+              Backend.getAnnouncements(reduce((announcements) => Announcements(announcements)))
+            )
           />
         }
       )
