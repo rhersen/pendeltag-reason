@@ -29,9 +29,10 @@ let make = (_children) => {
     <div className="App">
       (
         if (Array.length(self.state.announcements) > 0) {
-          <div onClick=(self.reduce((_event) => Announcements([||])))>
-            (ReasonReact.stringToElement("X"))
-          </div>
+          <Header
+            onClick=(self.reduce((_event) => Announcements([||])))
+            location=(Backend.name(self.state.announcements[0].location))
+          />
         } else {
           <StationMenu
             stations=self.state.stations

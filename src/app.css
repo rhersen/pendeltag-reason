@@ -18,6 +18,27 @@
   font-size: large;
 }
 
+.close {
+  font-size: 32px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td {
+  border: 1px solid lightgray;
+  padding: 1px;
+  font-size: 18px;
+  text-align: left;
+}
+
+td.countdown {
+  width: 5ch;
+  text-align: right;
+}
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

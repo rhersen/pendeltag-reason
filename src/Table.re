@@ -27,6 +27,7 @@ let make = (~announcements, _children) => {
                       }
                     )
                   </td>
+                  <td className="countdown"> (ReasonReact.stringToElement("-")) </td>
                 </tr>,
               announcements
             )
