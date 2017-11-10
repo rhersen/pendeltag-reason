@@ -8,14 +8,15 @@ type action =
 
 type state = {
   stations: array(Backend.station),
-  announcements: array(Backend.announcement)
+  announcements: array(Backend.announcement),
+  now: (int, int, int)
 };
 
 let component = ReasonReact.reducerComponent("App");
 
 let make = (_children) => {
   ...component,
-  initialState: () => {stations: [||], announcements: [||]},
+  initialState: () => {stations: [||], announcements: [||], now: Backend.now()},
   reducer: (action, state) =>
     switch action {
     | Stations(stations) => ReasonReact.Update({...state, stations})
@@ -25,7 +26,7 @@ let make = (_children) => {
     Backend.getStations(reduce((stations) => Stations(stations)));
     ReasonReact.NoUpdate
   },
-  render: ({reduce, state: {announcements, stations}}) =>
+  render: ({reduce, state: {announcements, stations, now}}) =>
     <div className="App">
       (
         if (Array.length(announcements) > 0) {
@@ -42,6 +43,6 @@ let make = (_children) => {
           />
         }
       )
-      <Table announcements />
+      <Table announcements now />
     </div>
 };
