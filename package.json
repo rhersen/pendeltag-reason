@@ -2,6 +2,7 @@
   "name": "pendeltag-reason",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://secure.hersen.name/reason",
   "proxy": "http://localhost:1337",
   "dependencies": {
     "react": "^16.0.0",
