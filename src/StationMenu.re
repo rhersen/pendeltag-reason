@@ -6,7 +6,7 @@ let make = (~stations, ~onClick, _children) => {
     ReasonReact.arrayToElement(
       Array.map(
         (station: Backend.station) =>
-          <span key=station.signature>
+          <span className="station" key=station.signature>
             <span onClick=((_) => onClick(station.signature))>
               (ReasonReact.stringToElement(station.name))
             </span>

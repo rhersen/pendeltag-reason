@@ -1,7 +1,5 @@
 [%bs.raw {|require('./app.css')|}];
 
-[@bs.module] external logo : string = "./logo.svg";
-
 type action =
   | Stations(array(Backend.station))
   | Announcements(array(Backend.announcement))
