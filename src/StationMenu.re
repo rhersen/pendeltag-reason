@@ -6,8 +6,8 @@ let make = (~stations, ~onClick, _children) => {
     ReasonReact.arrayToElement(
       Array.map(
         (station: Backend.station) =>
-          <span>
-            <span key=station.signature onClick=((_) => onClick(station.signature))>
+          <span key=station.signature>
+            <span onClick=((_) => onClick(station.signature))>
               (ReasonReact.stringToElement(station.name))
             </span>
             <span> (ReasonReact.stringToElement({js| · |js})) </span>

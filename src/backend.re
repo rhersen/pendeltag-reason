@@ -20,8 +20,8 @@ type announcement = {
 
 [@bs.module "./ajax"] external now : unit => (int, int, int) = "now";
 
-[@bs.module "./ajax"] external interval : (unit => unit) => int = "interval";
+[@bs.module "./ajax"] external interval : (unit => unit) => unit = "interval";
 
-[@bs.module "./ajax"] external clear : int => unit = "clear";
+[@bs.module "./ajax"] external clear : unit => unit = "clear";
 
 [@bs.module "./ajax"] external name : string => string = "name";

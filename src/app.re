@@ -4,7 +4,8 @@
 
 type action =
   | Stations(array(Backend.station))
-  | Announcements(array(Backend.announcement));
+  | Announcements(array(Backend.announcement))
+  | Now((int, int, int));
 
 type state = {
   stations: array(Backend.station),
@@ -21,28 +22,31 @@ let make = (_children) => {
     switch action {
     | Stations(stations) => ReasonReact.Update({...state, stations})
     | Announcements(announcements) => ReasonReact.Update({...state, announcements})
+    | Now(hms) => ReasonReact.Update({...state, now: hms})
     },
   didMount: ({reduce}) => {
     Backend.getStations(reduce((stations) => Stations(stations)));
     ReasonReact.NoUpdate
   },
-  render: ({reduce, state: {announcements, stations, now}}) =>
+  render: ({reduce, state: {announcements, stations, now}}) => {
+    let tick = () => Now(Backend.now());
+    let handleAnnouncements = (announcements) => {
+      Backend.interval(reduce(tick));
+      Announcements(announcements)
+    };
+    let clear = (_event) => {
+      Backend.clear();
+      Announcements([||])
+    };
     <div className="App">
       (
         if (Array.length(announcements) > 0) {
-          <Header
-            onClick=(reduce((_event) => Announcements([||])))
-            location=(Backend.name(announcements[0].location))
-          />
+          <Header onClick=(reduce(clear)) location=(Backend.name(announcements[0].location)) />
         } else {
-          <StationMenu
-            stations
-            onClick=(
-              Backend.getAnnouncements(reduce((announcements) => Announcements(announcements)))
-            )
-          />
+          <StationMenu stations onClick=(Backend.getAnnouncements(reduce(handleAnnouncements))) />
         }
       )
       <Table announcements now />
     </div>
+  }
 };

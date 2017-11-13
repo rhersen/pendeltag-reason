@@ -84,11 +84,13 @@ function now() {
   return [d.getHours(), d.getMinutes(), d.getSeconds()];
 }
 
+let intervalId;
+
 function interval(callback) {
-  return setInterval(callback, 990);
+  intervalId = setInterval(callback, 990);
 }
 
-function clear(intervalId) {
+function clear() {
   return clearInterval(intervalId);
 }
 
