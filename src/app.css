@@ -27,8 +27,16 @@ table {
   width: 100%;
 }
 
+tr.northbound {
+  background-color: #fdd;
+}
+
+tr.southbound {
+  background-color: lightblue;
+}
+
 td {
-  border: 1px solid lightgray;
+  border: 1px solid white;
   padding: 1px;
   font-size: 18px;
   text-align: left;

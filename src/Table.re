@@ -2,6 +2,11 @@ let formatTime = (s) => String.sub(s, 11, 5);
 
 let component = ReasonReact.statelessComponent("Table");
 
+let direction = (id) => {
+  let t = Js.Re.test(id, [%re "/\\d\\d\\d\\d[24680]/"]);
+  if (t) {"northbound"} else {"southbound"}
+};
+
 let make = (~announcements, ~now, _children) => {
   ...component,
   render: (_self) =>
@@ -10,13 +15,15 @@ let make = (~announcements, ~now, _children) => {
         (
           ReasonReact.arrayToElement(
             Array.map(
-              (announcement: Backend.announcement) =>
-                <tr key=announcement.id>
+              (announcement: Backend.announcement) => {
+                <tr key=announcement.id className=direction(announcement.id)>
+                  <td> (ReasonReact.stringToElement(announcement.id)) </td>
                   <td> (ReasonReact.stringToElement(formatTime(announcement.time))) </td>
                   <td> (ReasonReact.stringToElement(Backend.name(announcement.destination))) </td>
                   <Time announcement />
                   <Countdown announcement now />
-                </tr>,
+                </tr>
+              },
               announcements
             )
           )
