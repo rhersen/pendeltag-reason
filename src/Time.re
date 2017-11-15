@@ -37,7 +37,7 @@ let make = (~announcement: Backend.announcement, _children) => {
         | None =>
           switch announcement.estimated {
           | Some(s) => <i> (ReasonReact.stringToElement(formatTime(s))) </i>
-          | None => ReasonReact.stringToElement("-")
+          | None => ReasonReact.stringToElement(formatTime(announcement.time))
           }
         }
       )
