@@ -38,7 +38,8 @@ tr.southbound {
 td {
   border: 1px solid white;
   padding: 1px;
-  font-size: 25px;
+  font-size: 20px;
+  font-family: Helvetica, sans-serif;
   text-align: left;
 }
 
