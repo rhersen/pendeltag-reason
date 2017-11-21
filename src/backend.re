@@ -1,6 +1,8 @@
 type station = {
   signature: string,
-  name: string
+  name: string,
+  east: float,
+  north: float
 };
 
 type announcement = {

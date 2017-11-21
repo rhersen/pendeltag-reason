@@ -18,7 +18,12 @@ let make = (_children) => {
   initialState: () => {stations: [||], announcements: [||], now: Backend.now()},
   reducer: (action, state) =>
     switch action {
-    | Stations(stations) => ReasonReact.Update({...state, stations})
+    | Stations(stations) =>
+      Array.sort(
+        (a: Backend.station, b: Backend.station) => - Pervasives.compare(a.north, b.north),
+        stations
+      );
+      ReasonReact.Update({...state, stations})
     | Announcements(announcements) => ReasonReact.Update({...state, announcements})
     | Now(hms) => ReasonReact.Update({...state, now: hms})
     },

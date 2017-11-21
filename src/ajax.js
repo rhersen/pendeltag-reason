@@ -21,7 +21,9 @@ function getStations(callback) {
       results.map(function(r) {
         return [
           r.LocationSignature,
-          r.AdvertisedShortLocationName
+          r.AdvertisedShortLocationName,
+          r.east,
+          r.north
         ];
       })
     );
