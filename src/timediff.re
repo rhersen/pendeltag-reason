@@ -12,16 +12,10 @@ let time = (announcement: Backend.announcement) =>
 
 let pad = (i) => i < 10 ? "0" ++ string_of_int(i) : string_of_int(i);
 
-let secondsToString = (d) =>
-  if (d <= (-100)) {
-    ""
-  } else if (d < 100) {
-    string_of_int(d) ++ "s"
-  } else if (d < 600) {
-    string_of_int(d / 60) ++ ":" ++ pad(d mod 60)
-  } else {
-    string_of_int(d / 60) ++ "min"
-  };
+let secondsToString = (d: int) => {
+  let minutes = float_of_int(d) /. 60.;
+  Printf.sprintf("%.1f", minutes)
+};
 
 let diffInSeconds = (now, hms) =>
   switch hms {
