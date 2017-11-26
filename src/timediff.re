@@ -12,7 +12,7 @@ let time = (announcement: Backend.announcement) =>
 
 let pad = (i) => i < 10 ? "0" ++ string_of_int(i) : string_of_int(i);
 
-let format = (d) =>
+let secondsToString = (d) =>
   if (d <= (-100)) {
     ""
   } else if (d < 100) {
@@ -23,16 +23,16 @@ let format = (d) =>
     string_of_int(d / 60) ++ "min"
   };
 
-let formatDiff = (now, time) =>
-  switch time {
+let diffInSeconds = (now, hms) =>
+  switch hms {
   | [h, m, s] =>
     let (hour, minute, second) = now;
     let d = (h - hour) * 60 * 60 + (m - minute) * 60 + s - second;
-    format(d < (-12) * hours ? d + 24 * hours : d)
-  | _ => "wrong length"
+    d < (-12) * hours ? d + 24 * hours : d
+  | _ => 0
   };
 
-let match = (capture) =>
+let parseInt = (capture) =>
   switch (Js.Nullable.to_opt(capture)) {
   | Some(capture) => int_of_string(capture)
   | None => 0
@@ -43,5 +43,9 @@ let format = (announcement: Backend.announcement, now) =>
   | None => time(announcement)
   | Some(result) =>
     let captures = Js.Re.captures(result);
-    [1, 2, 3] |> List.map((i) => captures[i]) |> List.map(match) |> formatDiff(now)
+    [1, 2, 3]
+    |> List.map((i) => captures[i])
+    |> List.map(parseInt)
+    |> diffInSeconds(now)
+    |> secondsToString
   };
