@@ -21,6 +21,7 @@ let make = (~announcements, ~now, _children) => {
                   <td className="destination">
                     (ReasonReact.stringToElement(Backend.name(announcement.destination)))
                   </td>
+                  <AdvertisedTime announcement />
                   <Time announcement />
                   <Countdown announcement now />
                 </tr>,

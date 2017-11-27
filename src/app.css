@@ -79,6 +79,12 @@ td {
   }
 }
 
+@media (max-width: 420px) {
+  td.advertised {
+    display: none;
+  }
+}
+
 td.countdown {
   text-align: right;
 }
