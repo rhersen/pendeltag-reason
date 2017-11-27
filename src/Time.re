@@ -30,7 +30,7 @@ let component = ReasonReact.statelessComponent("Countdown");
 let make = (~announcement: Backend.announcement, _children) => {
   ...component,
   render: (_self) =>
-    <td>
+    <td className="time">
       (
         switch announcement.actual {
         | Some(s) => <b> (ReasonReact.stringToElement(formatTime(s))) </b>
