@@ -17,10 +17,8 @@ let make = (~announcements, ~now, _children) => {
             Array.map(
               (announcement: Backend.announcement) =>
                 <tr key=announcement.id className=(direction(announcement.id))>
-                  <td className="id"> (ReasonReact.stringToElement(announcement.id)) </td>
-                  <td className="destination">
-                    (ReasonReact.stringToElement(Backend.name(announcement.destination)))
-                  </td>
+                  <TrainId announcement />
+                  <Destination announcement />
                   <AdvertisedTime announcement />
                   <Time announcement />
                   <Countdown announcement now />
