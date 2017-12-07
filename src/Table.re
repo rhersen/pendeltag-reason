@@ -21,6 +21,7 @@ let make = (~announcements, ~now, _children) => {
                   <Destination announcement />
                   <AdvertisedTime announcement />
                   <Time announcement />
+                  <Delay announcement />
                   <Countdown announcement now />
                 </tr>,
               announcements

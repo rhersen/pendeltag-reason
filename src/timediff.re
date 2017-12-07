@@ -1,5 +1,29 @@
-let format = (announcement: Backend.announcement, now) => {
+let parse = (t) => {
+  let hmsTuple = (hms) =>
+    switch hms {
+    | [h1, m1, s1] => (h1, m1, s1)
+    | _ => (0, 0, 0)
+    };
+  let parseInt = (capture) =>
+    switch (Js.Nullable.to_opt(capture)) {
+    | Some(capture) => int_of_string(capture)
+    | None => 0
+    };
+  switch (Js.Re.exec(t, [%re "/T(\\d\\d):(\\d\\d):(\\d\\d)/"])) {
+  | None => (0, 0, 0)
+  | Some(result) =>
+    let captures = Js.Re.captures(result);
+    [1, 2, 3] |> List.map((i) => captures[i]) |> List.map(parseInt) |> hmsTuple
+  }
+};
+
+let diffInSeconds = ((h0, m0, s0), (h1, m1, s1)) => {
   let hours = 3600;
+  let d = (h1 - h0) * 60 * 60 + (m1 - m0) * 60 + s1 - s0;
+  d < (-12) * hours ? d + 24 * hours : d
+};
+
+let format = (announcement: Backend.announcement, now) => {
   let time = (announcement: Backend.announcement) =>
     switch announcement.actual {
     | Some(s) => s
@@ -20,27 +44,5 @@ let format = (announcement: Backend.announcement, now) => {
     } else {
       string_of_int(d / 60) ++ "min"
     };
-  let diffInSeconds = (now, hms) =>
-    switch hms {
-    | [h, m, s] =>
-      let (hour, minute, second) = now;
-      let d = (h - hour) * 60 * 60 + (m - minute) * 60 + s - second;
-      d < (-12) * hours ? d + 24 * hours : d
-    | _ => 0
-    };
-  let parseInt = (capture) =>
-    switch (Js.Nullable.to_opt(capture)) {
-    | Some(capture) => int_of_string(capture)
-    | None => 0
-    };
-  switch (Js.Re.exec(time(announcement), [%re "/T(\\d\\d):(\\d\\d):(\\d\\d)/"])) {
-  | None => time(announcement)
-  | Some(result) =>
-    let captures = Js.Re.captures(result);
-    [1, 2, 3]
-    |> List.map((i) => captures[i])
-    |> List.map(parseInt)
-    |> diffInSeconds(now)
-    |> secondsToString
-  }
+  announcement |> time |> parse |> diffInSeconds(now) |> secondsToString
 };
