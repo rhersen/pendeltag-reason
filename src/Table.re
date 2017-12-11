@@ -3,7 +3,7 @@ let formatTime = (s) => String.sub(s, 11, 5);
 let component = ReasonReact.statelessComponent("Table");
 
 let direction = (id) => {
-  let t = Js.Re.test(id, [%re "/\\d\\d\\d\\d[24680]/"]);
+  let t = Js.Re.test(id, [%re "/\\d\\d\\d[24680]/"]);
   if (t) {"northbound"} else {"southbound"}
 };
 
@@ -23,6 +23,7 @@ let make = (~announcements, ~now, _children) => {
                   <Time announcement />
                   <Delay announcement />
                   <Countdown announcement now />
+                  <Deviation announcement />
                 </tr>,
               announcements
             )

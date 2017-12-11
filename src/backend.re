@@ -9,6 +9,7 @@ type announcement = {
   id: string,
   activity: string,
   destination: string,
+  deviation: string,
   location: string,
   time: string,
   estimated: option(string),

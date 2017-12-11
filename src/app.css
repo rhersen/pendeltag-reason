@@ -73,19 +73,19 @@ td {
   padding: 0 2px;
 }
 
-@media (max-width: 374px) {
+@media (max-width: 520px) {
   td.id {
     display: none;
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 580px) {
   td.advertised {
     display: none;
   }
 }
 
-@media (max-width: 490px) {
+@media (max-width: 460px) {
   td.delay {
     display: none;
   }

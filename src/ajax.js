@@ -68,6 +68,9 @@ function getAnnouncements(callback, signature) {
           r.ToLocation && r.ToLocation.length
             ? r.ToLocation[0].LocationName
             : "?",
+          r.Deviation && r.Deviation.length
+            ? r.Deviation.join("/")
+            : "",
           r.LocationSignature,
           r.AdvertisedTimeAtLocation,
           option("EstimatedTimeAtLocation"),

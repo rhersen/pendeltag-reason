@@ -1,19 +1,19 @@
 let parse = (t) => {
   let hmsTuple = (hms) =>
     switch hms {
-    | [h1, m1, s1] => (h1, m1, s1)
+    | [Some(h1), Some(m1), Some(s1)] => (h1, m1, s1)
     | _ => (0, 0, 0)
     };
   let parseInt = (capture) =>
     switch (Js.Nullable.to_opt(capture)) {
-    | Some(capture) => int_of_string(capture)
-    | None => 0
+    | Some(capture) => Some(int_of_string(capture))
+    | None => None
     };
   switch (Js.Re.exec(t, [%re "/T(\\d\\d):(\\d\\d):(\\d\\d)/"])) {
   | None => (0, 0, 0)
   | Some(result) =>
     let captures = Js.Re.captures(result);
-    [1, 2, 3] |> List.map((i) => captures[i]) |> List.map(parseInt) |> hmsTuple
+    [1, 2, 3] |> List.map((i) => parseInt(captures[i])) |> hmsTuple
   }
 };
 

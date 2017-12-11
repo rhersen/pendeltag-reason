@@ -4,5 +4,5 @@ let component = ReasonReact.statelessComponent("TrainId");
 
 let make = (~announcement: Backend.announcement, _children) => {
   ...component,
-  render: (_self) => <td className="id"> (el(Backend.name(announcement.id))) </td>
+  render: (_self) => <td className="id"> (el(announcement.id)) </td>
 };
