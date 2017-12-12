@@ -18,13 +18,14 @@ let make = (~announcements, ~now, _children) => {
               (announcement: Backend.announcement) =>
                 <tr key=announcement.id className=(direction(announcement.id))>
                   <TrainId announcement />
+                  <Short announcement />
                   <Destination announcement />
                   <AdvertisedTime announcement />
                   <Time announcement />
                   <Delay announcement />
                   <Countdown announcement now />
                   <Deviation announcement />
-                </tr>,
+                  </tr>,
               announcements
             )
           )

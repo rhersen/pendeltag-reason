@@ -85,7 +85,13 @@ td {
   }
 }
 
-@media (max-width: 460px) {
+@media (max-width: 640px) {
+  td.deviation {
+    display: none;
+  }
+}
+
+@media (max-width: 370px) {
   td.delay {
     display: none;
   }
