@@ -2,7 +2,7 @@ let el = ReasonReact.stringToElement;
 
 let s = (announcement: Backend.announcement) =>
   Array.fold_left(
-    (s1, s2) => String.compare(String.sub(s2, 0, 6), "Kort t") == 0 ? "K" : s1,
+    (s1, s2) => String.compare(String.sub(s2, 0, 4), "Kort") == 0 ? "K" : s1,
     "",
     announcement.deviation
   );
