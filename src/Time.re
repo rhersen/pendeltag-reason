@@ -1,3 +1,5 @@
+let el = ReasonReact.stringToElement;
+
 let component = ReasonReact.statelessComponent("Time");
 
 let make = (~announcement: Backend.announcement, _children) => {
@@ -7,11 +9,11 @@ let make = (~announcement: Backend.announcement, _children) => {
     <td className="time">
       (
         switch announcement.actual {
-        | Some(s) => <b> (ReasonReact.stringToElement(formatTime(s))) </b>
+        | Some(s) => <b> (el(formatTime(s))) </b>
         | None =>
           switch announcement.estimated {
-          | Some(s) => <i> (ReasonReact.stringToElement(formatTime(s))) </i>
-          | None => ReasonReact.stringToElement(formatTime(announcement.time))
+          | Some(s) => <i> (el(formatTime(s))) </i>
+          | None => el(formatTime(announcement.time))
           }
         }
       )

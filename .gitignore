@@ -5,6 +5,8 @@
 
 # testing
 /coverage
+departures.json
+pendel.json
 
 # production
 /build

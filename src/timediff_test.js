@@ -2,7 +2,7 @@ import Timediff from "./timediff.re";
 
 describe("Timediff.format", () => {
   test("empty input", () => {
-    expect(Timediff.format(["", "", "", "", "", 0, 0], [0, 0, 0])).toBe("");
+    expect(Timediff.format(["", "", "", "", "", 0, 0], [0, 0, 0])).toBe("0s");
   });
 
   test("seconds", () => {
@@ -31,5 +31,5 @@ describe("Timediff.format", () => {
 });
 
 function actual(t, now) {
-  return Timediff.format(["", "", "", "", t, 0, 0], now);
+  return Timediff.format(["", "", "", [], "", t, 0, 0], now);
 }
