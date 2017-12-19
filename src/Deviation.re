@@ -1,7 +1,11 @@
 let el = ReasonReact.stringToElement;
 
 let s = (announcement: Backend.announcement) =>
-  Array.fold_left((s1, s2) => s1 ++ s2, "", announcement.deviation);
+  switch (Array.to_list(announcement.deviation)) {
+  | [] => ""
+  | [one] => one
+  | _ => "*"
+  };
 
 let component = ReasonReact.statelessComponent("Deviation");
 
