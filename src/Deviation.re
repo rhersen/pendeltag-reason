@@ -2,7 +2,7 @@ let el = ReasonReact.stringToElement;
 
 let s = (announcement: Backend.announcement) =>
   switch (Array.to_list(announcement.deviation)) {
-  | [] => ""
+  | [] => "inga"
   | [one] => one
   | _ => "*"
   };
