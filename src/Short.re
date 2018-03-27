@@ -3,7 +3,7 @@ let el = ReasonReact.stringToElement;
 let s = (announcement: Backend.announcement) =>
   Array.fold_left(
     (s1, s2) =>
-      if (String.compare(String.sub(s2, 0, 4), "Kort") == 0) {
+      if (String.length(s2) >= 4 && String.compare(String.sub(s2, 0, 4), "Kort") == 0) {
         "K"
       } else if (String.length(s2) > 0) {
         "*"
