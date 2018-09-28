@@ -9,7 +9,7 @@ function onerror(e) {
 }
 
 function getStations(callback) {
-  var request = new XMLHttpRequest();
+  const request = new XMLHttpRequest()
   request.open("GET", "/json/pendel", true);
 
   request.onload = function() {
@@ -34,7 +34,7 @@ function getStations(callback) {
 }
 
 function getAnnouncements(callback, signature) {
-  var request = new XMLHttpRequest();
+  const request = new XMLHttpRequest()
 
   request.open(
     "GET",
