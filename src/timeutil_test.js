@@ -1,8 +1,8 @@
-import Timediff from "./timediff.re";
+import Timeutil from "./timeutil.re";
 
-describe("Timediff.format", () => {
+describe("Timeutil.format", () => {
   test("empty input", () => {
-    expect(Timediff.format(["", "", "", "", "", 0, 0], [0, 0, 0])).toBe("0s");
+    expect(Timeutil.format(["", "", "", "", "", 0, 0], [0, 0, 0])).toBe("0s");
   });
 
   test("seconds", () => {
@@ -31,5 +31,5 @@ describe("Timediff.format", () => {
 });
 
 function actual(t, now) {
-  return Timediff.format(["", "", "", [], "", t, 0, 0], now);
+  return Timeutil.format(["", "", "", [], "", t, 0, 0], now);
 }
