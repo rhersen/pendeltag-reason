@@ -1,7 +1,7 @@
 let el = ReasonReact.stringToElement;
 
 let diff = (t, s) =>
-  switch (Timediff.diffInSeconds(Timediff.parse(t), Timediff.parse(s)) / 60) {
+  switch (Timediff.diffInSeconds(t, s) / 60) {
   | 0 => el("i tid")
   | d => el(string_of_int(d) ++ " min")
   };

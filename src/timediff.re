@@ -17,11 +17,13 @@ let parse = (t) => {
   }
 };
 
-let diffInSeconds = ((h0, m0, s0), (h1, m1, s1)) => {
+let diffHms = ((h0, m0, s0), (h1, m1, s1)) => {
   let hours = 3600;
   let d = (h1 - h0) * 60 * 60 + (m1 - m0) * 60 + s1 - s0;
   d < (-12) * hours ? d + 24 * hours : d
 };
+
+let diffInSeconds = (t, s) => diffHms(parse(t), parse(s));
 
 let format = (announcement: Backend.announcement, now) => {
   let time = (announcement: Backend.announcement) =>
@@ -44,5 +46,5 @@ let format = (announcement: Backend.announcement, now) => {
     } else {
       string_of_int(d / 60) ++ "min"
     };
-  announcement |> time |> parse |> diffInSeconds(now) |> secondsToString
+  announcement |> time |> parse |> diffHms(now) |> secondsToString
 };
