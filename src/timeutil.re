@@ -1,4 +1,7 @@
-let diffInSeconds = (t, s) => Timediff.diffHms(Timediff.parse(t), Timediff.parse(s));
+let diffInMinutes = (t, s) => {
+  let diffInSeconds = (t, s) => Timediff.diffHms(Timediff.parse(t), Timediff.parse(s));
+  diffInSeconds(t, s) / 60
+};
 
 let format = (announcement: Backend.announcement, now) => {
   let time = (announcement: Backend.announcement) =>

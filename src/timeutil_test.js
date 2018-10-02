@@ -2,9 +2,8 @@ import Timeutil from './timeutil.re'
 
 describe('Timeutil', () => {
   describe('format', () => {
-    test('empty input', () => {
-      expect(Timeutil.format(['', '', '', '', '', 0, 0], [0, 0, 0])).toBe('0s')
-    })
+    test('empty input', () =>
+      expect(Timeutil.format(['', '', '', '', '', 0, 0], [0, 0, 0])).toBe('0s'))
 
     test('seconds', () => {
       expect(actual('T13:38:00', [13, 37, 30])).toBe('30s')
@@ -18,20 +17,27 @@ describe('Timeutil', () => {
       expect(actual('T13:38:00', [13, 35, 50])).toBe('2:10')
     })
 
-    test('minutes', () => {
-      expect(actual('T13:38:00', [13, 27, 0])).toBe('11min')
-    })
+    test('minutes', () =>
+      expect(actual('T13:38:00', [13, 27, 0])).toBe('11min'))
 
-    test('across day boundary', () => {
-      expect(actual('T00:05:00', [23, 59, 0])).toBe('6:00')
-    })
+    test('across day boundary', () =>
+      expect(actual('T00:05:00', [23, 59, 0])).toBe('6:00'))
 
-    test("don't show negative minutes", () => {
-      expect(actual('T13:36:00', [13, 38, 0])).toBe('')
-    })
+    test("don't show negative minutes", () =>
+      expect(actual('T13:36:00', [13, 38, 0])).toBe(''))
 
     function actual(t, now) {
       return Timeutil.format(['', '', '', [], '', t, 0, 0], now)
     }
+  })
+
+  describe('diffInMinutes', () => {
+    test('empty input', () => expect(Timeutil.diffInMinutes()).toBe(0))
+    test('hours', () =>
+      expect(Timeutil.diffInMinutes('T13:59:00', 'T14:01:00')).toBe(2))
+    test('minutes', () =>
+      expect(Timeutil.diffInMinutes('T13:36:00', 'T13:38:00')).toBe(2))
+    test('midnight', () =>
+      expect(Timeutil.diffInMinutes('T23:38:00', 'T01:38:00')).toBe(120))
   })
 })
