@@ -5,6 +5,7 @@
   "homepage": "https://secure.hersen.name/reason",
   "proxy": "http://localhost:1337",
   "dependencies": {
+    "prettier": "^1.14.3",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "reason-scripts": "0.7.0"

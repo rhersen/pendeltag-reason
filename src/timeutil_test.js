@@ -1,35 +1,37 @@
-import Timeutil from "./timeutil.re";
+import Timeutil from './timeutil.re'
 
-describe("Timeutil.format", () => {
-  test("empty input", () => {
-    expect(Timeutil.format(["", "", "", "", "", 0, 0], [0, 0, 0])).toBe("0s");
-  });
+describe('Timeutil', () => {
+  describe('format', () => {
+    test('empty input', () => {
+      expect(Timeutil.format(['', '', '', '', '', 0, 0], [0, 0, 0])).toBe('0s')
+    })
 
-  test("seconds", () => {
-    expect(actual("T13:38:00", [13, 37, 30])).toBe("30s");
-    expect(actual("T13:38:00", [13, 37, 40])).toBe("20s");
-    expect(actual("T13:38:00", [13, 37, 1])).toBe("59s");
-  });
+    test('seconds', () => {
+      expect(actual('T13:38:00', [13, 37, 30])).toBe('30s')
+      expect(actual('T13:38:00', [13, 37, 40])).toBe('20s')
+      expect(actual('T13:38:00', [13, 37, 1])).toBe('59s')
+    })
 
-  test("minutes:seconds", () => {
-    expect(actual("T13:38:00", [13, 36, 0])).toBe("2:00");
-    expect(actual("T13:38:00", [13, 35, 55])).toBe("2:05");
-    expect(actual("T13:38:00", [13, 35, 50])).toBe("2:10");
-  });
+    test('minutes:seconds', () => {
+      expect(actual('T13:38:00', [13, 36, 0])).toBe('2:00')
+      expect(actual('T13:38:00', [13, 35, 55])).toBe('2:05')
+      expect(actual('T13:38:00', [13, 35, 50])).toBe('2:10')
+    })
 
-  test("minutes", () => {
-    expect(actual("T13:38:00", [13, 27, 0])).toBe("11min");
-  });
+    test('minutes', () => {
+      expect(actual('T13:38:00', [13, 27, 0])).toBe('11min')
+    })
 
-  test("across day boundary", () => {
-    expect(actual("T00:05:00", [23, 59, 0])).toBe("6:00");
-  });
+    test('across day boundary', () => {
+      expect(actual('T00:05:00', [23, 59, 0])).toBe('6:00')
+    })
 
-  test("don't show negative minutes", () => {
-    expect(actual("T13:36:00", [13, 38, 0])).toBe("");
-  });
-});
+    test("don't show negative minutes", () => {
+      expect(actual('T13:36:00', [13, 38, 0])).toBe('')
+    })
 
-function actual(t, now) {
-  return Timeutil.format(["", "", "", [], "", t, 0, 0], now);
-}
+    function actual(t, now) {
+      return Timeutil.format(['', '', '', [], '', t, 0, 0], now)
+    }
+  })
+})
